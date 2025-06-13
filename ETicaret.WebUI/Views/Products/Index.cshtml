@@ -2,13 +2,24 @@
 @{
     ViewData["Title"] = "Ürünlerimiz";
 }
-<div class="my-5">
-
-    <h1 class="text-center">Ürünlerimiz</h1>
-    <div class="row class=" row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"">
+<div class="container my-5">
+    <h1 class="text-center text-white mb-5">Ürünlerimiz</h1>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
         @foreach (var item in Model)
         {
-            <partial name="_ProductView" model="@item" />
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/Img/Products/@item.Image" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title text-white">@item.Name</h5>
+                        <p class="card-text text-muted">@item.Description</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-white fw-bold">@item.Price.ToString("C")</span>
+                            <a href="/Products/Details/@item.Id" class="btn btn-primary">Detaylar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
     </div>
 </div>

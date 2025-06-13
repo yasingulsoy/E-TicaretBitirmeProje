@@ -1,7 +1,6 @@
 ﻿@using ETicaret.WebUI.ExtensionMethods
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                 <img src="/Img/resim.png" alt="" height="50" width="75" />
@@ -10,104 +9,103 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-evenly">
-                <form action="/Products" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                    <input name="q" type="search" class="form-control" placeholder="Ürün Ara..." aria-label="Search">
-                </form>
-                <ul class="navbar-nav m-auto">
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Anasayfa</a>
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home"></i> Anasayfa
+                        </a>
                     </li>
-                    @* Burada Category componentini çağırarak içerisindeki kategorileri ekrana bastırdık *@
-                    @await Component.InvokeAsync("Categories")
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-th-large"></i> Kategoriler
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            @await Component.InvokeAsync("Categories")
+                        </ul>
+                    </li>
                 </ul>
-                @* Sistemdeki kullanıcı oturum açtı mı açmadı mı *@
-                @if (Context.User.Identity.IsAuthenticated)
-                {
-                    <div class="dropdown">
-                        <a class="dropdown-toggle nav-link text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-fill"></i> Hesabım
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/Account/MyOrders">Tüm Siparişlerim</a></li>
-                            <li><a class="dropdown-item" href="/MyAdresses/Index">Kayıtlı Adreslerim</a></li>
-                            <li><a class="dropdown-item" href="/Account/Index">Kullanıcı Bilgilerim</a></li>
-                            <li class="text-center"><a class="btn btn-danger" href="/Account/SignOut">Çıkış Yap</a></li>
 
-                        </ul>
+                <form action="/Products" class="d-flex mx-auto" role="search">
+                    <div class="input-group">
+                        <input name="q" type="search" class="form-control" placeholder="Ürün Ara..." aria-label="Search">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
                     </div>
+                </form>
 
-                }
-                else
-                {
-                    <div class="dropdown">
-                        <a class="dropdown-toggle nav-link text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person"></i> Giriş Yap
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/Account/SignIn">Giriş</a></li>
-                            <li><a class="dropdown-item" href="/Account/SignUp">Kayıt Ol</a></li>
-
-                        </ul>
-                    </div>
-
-                }
-                <div class="dropdown mx-3">
-                    @{
-                        var favorites = Context.Session.GetJson<List<Product>>("GetFavorites");
-                        if (favorites != null && favorites.Count > 0)
-                        {
-                            <a class="nav-link text-dark" href="/Favorites">
-                                <i class="bi bi-star-fill"></i> Favorilerim
-                                <span class="badge bg-danger text-white ms-1 rounded-pill">
-                                    @favorites.Count
-                                </span>
+                <ul class="navbar-nav ms-auto">
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user"></i> Hesabım
                             </a>
-
-                        }
-                        else
-                        {
-                            <a class=" nav-link text-dark" href="/Favorites">
-                                <i class="bi bi-star-fill"></i> Favorilerim
-                            </a>
-                        }
-                    }
-                </div>
-                <div class="dropdown ms-1">
-                    @{
-                        var cart = Context.Session.GetJson<ETicaret.Service.Concrete.CartService>("Cart");
-                        if (cart != null && cart.CartLines.Count > 0)
-                        {
-                            <a class="dropdown-toggle nav-link text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-bag-heart-fill"></i> Sepetim
-                                <span class="badge bg-warning text-white ms-1 rounded-pill">
-                                    @cart.CartLines.Count
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                @foreach (var item in cart.CartLines)
-                                {
-                                    <li>
-                                        <a class="dropdown-item" href="/Products/Details/@item.Product.Id">
-                                            <img src="/Img/Products/@item.Product.Image" alt="" height="40" />
-                                            @item.Product.Name
-                                        </a>
-                                    </li>
-
-                                }
-                                <li class="text-center"><a class="btn btn-warning m-auto" href="/Cart">Sepete Git</a></li>
+                            <ul class="dropdown-menu dropdown-menu-dark">
+                                <li><a class="dropdown-item" href="/Account/MyOrders"><i class="fas fa-shopping-bag"></i> Siparişlerim</a></li>
+                                <li><a class="dropdown-item" href="/MyAdresses/Index"><i class="fas fa-map-marker-alt"></i> Adreslerim</a></li>
+                                <li><a class="dropdown-item" href="/Account/Index"><i class="fas fa-user-cog"></i> Bilgilerim</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="/Account/SignOut"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</a></li>
                             </ul>
-                        }
-                        else
-                        {
-                            <a class=" nav-link text-dark" href="/Cart">
-                                <i class="bi bi-bag-heart-fill"></i> Sepetim
-                            </a>
-                        }
-
+                        </li>
                     }
-                </div>
-                <a class="nav-link text-dark mx-3" asp-controller="Home" asp-action="ContactUs">İletişim</a>
+                    else
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-sign-in-alt"></i> Giriş Yap
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark">
+                                <li><a class="dropdown-item" href="/Account/SignIn"><i class="fas fa-sign-in-alt"></i> Giriş</a></li>
+                                <li><a class="dropdown-item" href="/Account/SignUp"><i class="fas fa-user-plus"></i> Kayıt Ol</a></li>
+                            </ul>
+                        </li>
+                    }
+
+                    <li class="nav-item">
+                        @{
+                            var favorites = Context.Session.GetJson<List<Product>>("GetFavorites");
+                            if (favorites != null && favorites.Count > 0)
+                            {
+                                <a class="nav-link position-relative" href="/Favorites">
+                                    <i class="fas fa-heart"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        @favorites.Count
+                                    </span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" href="/Favorites">
+                                    <i class="fas fa-heart"></i>
+                                </a>
+                            }
+                        }
+                    </li>
+
+                    <li class="nav-item">
+                        @{
+                            var cart = Context.Session.GetJson<ETicaret.Service.Concrete.CartService>("Cart");
+                            if (cart != null && cart.CartLines.Count > 0)
+                            {
+                                <a class="nav-link position-relative" href="/Cart">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+                                        @cart.CartLines.Count
+                                    </span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" href="/Cart">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </a>
+                            }
+                        }
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

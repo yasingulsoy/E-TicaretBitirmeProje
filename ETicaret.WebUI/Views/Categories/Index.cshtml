@@ -1,15 +1,25 @@
-﻿@model Category
+﻿@model ETicaret.Core.Entities.Category
 
-@{
-    ViewData["Title"] = Model.Name;
-}
-<div class="my-5">
+<h2>@Model.Name Kategorisindeki Ürünler</h2>
 
-    <h1 class="text-center">@Model.Name</h1>
-    <div class="row class=" row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center"">
-        @foreach (var item in Model.Products)
+@if (Model.Products != null && Model.Products.Any())
+{
+    <div class="row">
+        @foreach (var product in Model.Products)
         {
-            <partial name="_ProductView" model="@item" />
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Description</p>
+                        <p class="card-text text-muted">@product.Price ₺</p>
+                    </div>
+                </div>
+            </div>
         }
     </div>
-</div>
+}
+else
+{
+    <p>Bu kategoride ürün bulunmamaktadır.</p>
+}
